@@ -1,12 +1,12 @@
 package grpc.calculator.client;
 
 import com.proto.calculator.*;
-import com.proto.greet.LongGreetRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +58,7 @@ public class CalculatorClient {
 
     //CODE REFACTORING
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("Hello! I'm a gRPC calculator client");
 
         CalculatorClient main = new CalculatorClient();
@@ -66,14 +66,15 @@ public class CalculatorClient {
 
     }
 
-    public  void  run() {
+    public  void  run() throws IOException {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052)
                 .usePlaintext().build();
-//        doUnaryCall(channel);
+
+        doUnaryCall(channel);
 //        doServerStreamingCall(channel);
 //        doClientStreamingCall(channel);
 //        doBiDiStreamingCall(channel);
-        doErrorCall(channel);
+//        doErrorCall(channel);
 
         System.out.println("Shutting down channel");
         channel.shutdown();

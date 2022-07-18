@@ -47,12 +47,17 @@ message SquareRootResponse {
 }
 
 service CalculatorService {
+
+  //UNARY
   rpc Sum(SumRequest) returns (SumResponse) {};
 
+  //SERVER STREAMING
   rpc PrimeNumberDecomposition (PrimeNumberDecompositionRequest) returns (stream PrimeNumberDecompositionResponse) {};
 
+  //CLIENT STREAMING
   rpc ComputeAverage (stream ComputeAverageRequest) returns (ComputeAverageResponse) {};
 
+  //BI-DIRECTIONAL (BIDI) STREAMING
   rpc FindMaximum(stream FindMaximumRequest) returns (stream FindMaximumResponse) {};
 
   //ERROR HANDLING

@@ -2,12 +2,11 @@ package grpc.greeting.client;
 
 import com.proto.dummy.DummyServiceGrpc;
 import com.proto.greet.*;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -95,7 +94,7 @@ public class GreetingClient {
 
     //CODE REFACTOR
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("Hello! I'm a gRPC greeting client");
         GreetingClient main = new GreetingClient();
         main.run();
@@ -104,14 +103,22 @@ public class GreetingClient {
 
     }
 
-    public  void  run() {
+    public  void  run() throws IOException {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
                 .usePlaintext().build();
+
+        //SERVER AUTHENTICATION SSL/TSL
+        ChannelCredentials creds = TlsChannelCredentials.newBuilder().trustManager(new File("ssl/ca.crt"))
+                .build();
+
+        ManagedChannel secureChannel = Grpc.newChannelBuilderForAddress("localhost", 50051, creds).build();
+
 //        doUnaryCall(channel);
 //        doServerSreamingCall(channel);
 //        doClientStreamingCall(channel);
 //        doBiDiStreamingCall(channel);
-        doUnaryCallWithDeadline(channel);
+//        doUnaryCallWithDeadline(channel);
+        doUnaryCall(secureChannel);
 
         //Do something/write some code
         System.out.println("Shutting down channel");
