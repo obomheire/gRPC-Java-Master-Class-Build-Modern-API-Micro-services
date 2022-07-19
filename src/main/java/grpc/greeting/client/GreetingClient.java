@@ -121,7 +121,7 @@ public class GreetingClient {
         doUnaryCall(secureChannel);
 
         //Do something/write some code
-        System.out.println("Shutting down channel");
+        System.out.println("Shutting down channel!");
         channel.shutdown();
     }
 
